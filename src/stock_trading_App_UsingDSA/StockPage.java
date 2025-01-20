@@ -71,6 +71,7 @@ public class StockPage extends Panel {
                             if (quantity > 0) {
                                 app.addToShortSelling(stock, quantity);
                                 quantityField.setText("");
+                                app.showTransactionPage(); // Show transaction page after selling
                             } else {
                                 throw new IllegalArgumentException("Invalid quantity");
                             }

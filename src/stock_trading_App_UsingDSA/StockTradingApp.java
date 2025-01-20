@@ -59,70 +59,70 @@ public class StockTradingApp {
     }
 
     public void showLoginPage() {
-        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
-        cardLayout.show(mainFrame, "login");
-        mainFrame.setVisible(true);
+        switchToPage("login");
     }
 
     public void showRegisterPage() {
-        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
-        cardLayout.show(mainFrame, "register");
+        switchToPage("register");
     }
 
     public void showStockPage() {
-        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
-        cardLayout.show(mainFrame, "stock");
+        switchToPage("stock");
     }
 
     public void showPortfolioPage() {
-        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
-        cardLayout.show(mainFrame, "portfolio");
+        switchToPage("portfolio");
         portfolioPage.updatePortfolio(portfolio);
     }
 
     public void showFundPage() {
-        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
-        cardLayout.show(mainFrame, "fund");
+        switchToPage("fund");
     }
 
     public void showTransactionPage() {
-        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
-        cardLayout.show(mainFrame, "transaction");
+        switchToPage("transaction");
         transactionPage.updateTransactions(transactions);
     }
 
     public void showShortSellingPage() {
-        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
-        cardLayout.show(mainFrame, "shortSelling");
+        switchToPage("shortSelling");
         shortSellingPage.updateShortSelling(shortSellingItems);
     }
 
+    private void switchToPage(String pageName) {
+        CardLayout cardLayout = (CardLayout) mainFrame.getLayout();
+        cardLayout.show(mainFrame, pageName);
+        mainFrame.setVisible(true);
+    }
+
     public void addToPortfolio(Stock stock, int quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
-        }
+        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
+
         PortfolioItem existingItem = findPortfolioItem(stock);
         if (existingItem != null) {
             existingItem.increaseQuantity(quantity);
         } else {
             portfolio.add(new PortfolioItem(stock, quantity));
         }
+
         transactions.add(new Transaction(stock, "Buy", quantity, stock.getPrice()));
         portfolioPage.updatePortfolio(portfolio);
+        transactionPage.updateTransactions(transactions);
     }
 
     public void addToShortSelling(Stock stock, int quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
-        }
+        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
+
         ShortSellingItem existingItem = findShortSellingItem(stock);
         if (existingItem != null) {
             existingItem.increaseQuantity(quantity);
         } else {
             shortSellingItems.add(new ShortSellingItem(stock, quantity));
         }
+
         transactions.add(new Transaction(stock, "Sell", quantity, stock.getPrice()));
         shortSellingPage.updateShortSelling(shortSellingItems);
+        transactionPage.updateTransactions(transactions);
     }
 
     private PortfolioItem findPortfolioItem(Stock stock) {
@@ -152,9 +152,7 @@ public class StockTradingApp {
     }
 
     public void addFunds(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
-        }
+        if (amount <= 0) throw new IllegalArgumentException("Amount must be positive");
         funds += amount;
     }
 
@@ -166,4 +164,3 @@ public class StockTradingApp {
         new StockTradingApp();
     }
 }
-
